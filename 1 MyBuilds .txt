@@ -1,0 +1,74 @@
+
+*Ensure -Compiler,Debugger /Interpreter
+
+Install > Open > Tools > New BuildSys :
+*A4 Built All > Choose Build-Sys : Automatic
+
+*Pref - Browse PKGS : Those what U builted
+
+
+
+
+----- 0_Ccpp .sublime-build
+
+
+{  //ExternalConsol-v1 : CMD
+
+"shell": true",
+"shell_cmd" : "g++.exe -ansi -g3 -Wall -std=c++20 \"$file\" -o \"$file_base_name\"  ",  //xCut,Name, ExeBuild
+"shell_cmd" : "start cmd /k \"$file_base_name\" &echo. &echo. &pause",
+
+"selector": "source.c || source.c++ || source.cpp",
+}
+
+
+
+{       // DynaSegment I/O-v1	
+"cmd":
+[
+  "cmd.exe","/c", "if not exist #inp.txt echo > #inp.txt",
+  "&&","g++.exe","-ansi","-g3","-Wall","-std=c++20","$file","-o", "$file_base_name", //xBuild A4 Pause json-compile '&&'
+  "&&", "${file_base_name}<#inp.txt>#out.txt","&&","#out.txt"// I/O-Redirection A4 pausing
+],					// Remove : last [ "&&","#out.txt""&&","#out.txt"] if want output in sublime CPview
+"shell": true,  "selector": "source.c || source.c++ || source.cpp"
+}
+
+
+
+--------Combo Approach :
+
+
+
+{
+    // Select_Diff-Variants : Cnt Sft B
+
+  "variants":
+  [
+    {
+      "name": "Internal  CPP", "shell": true,
+      "selector": "source.c || source.c++ || source.cpp",
+      "shell_cmd": "cmd /c \"if not exist #inp.txt echo > #inp.txt\" && g++.exe -ansi -g3 -Wall -std=c++20 \"$file\" -o \"$file_base_name\" && $file_base_name < #inp.txt > #out.txt ",
+    },
+    {
+      "name": "External  CPP", "shell": true,
+      "selector": "source.c || source.c++ || source.cpp",
+      "shell_cmd" : " g++.exe -ansi -g3 -Wall -std=c++20 \"$file\" -o $file_base_name && start cmd.exe /k $file_base_name &echo. &echo. &pause ",
+    },
+
+
+    {
+      "name":"External  Python3",  "shell": true,
+      "shell_cmd": "start cmd /k python3 -u \"$file\"",
+      "env": { "PYTHONIOENCODING": "utf-8" },
+      "selector": "source.python || source.py",
+    },
+
+
+    {
+      "name":"External  Java",
+      "selector": "source.java","shell": true,
+      "shell_cmd" : " javac.exe -g \"$file_name\" && start cmd.exe /k java $file_base_name"
+    },
+  ]
+}
+
